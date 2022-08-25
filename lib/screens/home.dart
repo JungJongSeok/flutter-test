@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
           profile: Profile(id: "2"),
           model: VideoType(
             url:
-                "https://www.hardlinecrawlers.com/data/xfmg/video/45/45558-5021b3b7c402468d5b018a8b4a2b448a.mp4",
+                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
             text: "text",
             like: 0,
             comment: 0,
@@ -208,33 +208,30 @@ class ItemTile extends StatelessWidget {
         shape: const RoundedRectangleBorder(
             side: BorderSide(),
             borderRadius: BorderRadius.all(Radius.circular(50.0))),
-        child: Material(
-          child: GestureDetector(
-            onTap: () {
-              !feedList.items.contains(feed)
-                  ? feedList.add(feed)
-                  : feedList.remove(feed);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(feedList.items.contains(feed)
-                      ? 'Added to favorites.'
-                      : 'Removed from favorites.'),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
-            },
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: 1,
-                height: 0.5,
-                child: VideoWidget(
-                  url: (feed.model as VideoType).url,
-                  play: isInView,
-                ),
+        child: Column(
+          children: [
+            ProfileWidget(profile: feed.profile ?? Profile(id: "id")),
+            GestureDetector(
+              onTap: () {
+                !feedList.items.contains(feed)
+                    ? feedList.add(feed)
+                    : feedList.remove(feed);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(feedList.items.contains(feed)
+                        ? 'Added to favorites.'
+                        : 'Removed from favorites.'),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+              child: VideoWidget(
+                url: (feed.model as VideoType).url,
+                play: isInView,
               ),
             ),
-          ),
+            FeedContentWidget(feedType: feed.model)
+          ],
         ),
       );
     } else {
@@ -314,12 +311,18 @@ class VideoWidgetState extends State<VideoWidget> {
   Widget build(BuildContext context) {
     widget.play ? _controller.play() : _controller.pause();
 
-    return FittedBox(
-      fit: BoxFit.cover,
-      child: SizedBox(
-        width: 1,
-        height: 0.5,
-        child: VideoPlayer(_controller),
+    var size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width,
+      height: size.width,
+      child: FittedBox(
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        child: Container(
+          width: size.width,
+          height: size.width / _controller.value.aspectRatio,
+          child: VideoPlayer(_controller),
+        ),
       ),
     );
   }
@@ -361,7 +364,7 @@ class ProfileWidgetState extends State<ProfileWidget> {
             ],
           ),
         ),
-        GestureDetector (
+        GestureDetector(
           onTap: () {
             setState(() {
               widget.profile?.setFollow(!(widget.profile?.isFollow ?? false));

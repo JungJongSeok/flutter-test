@@ -64,7 +64,7 @@ class ImageType extends FeedType {
   });
 }
 
-class VideoType extends TextType {
+class VideoType extends FeedType {
   final String url;
 
   VideoType({
