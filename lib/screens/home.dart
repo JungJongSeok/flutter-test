@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<FeedData> feedList = [
-      const FeedData<ImageType>(
+      FeedData<ImageType>(
           id: "1",
           profile: Profile(id: "1"),
           model: ImageType(
@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
             isBookmark: false,
             timestamp: 0,
           )),
-      const FeedData<VideoType>(
+      FeedData<VideoType>(
           id: "2",
           profile: Profile(id: "2"),
           model: VideoType(
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
             isBookmark: false,
             timestamp: 0,
           )),
-      const FeedData<TextType>(
+      FeedData<TextType>(
           id: "3",
           profile: Profile(id: "3"),
           model: TextType(
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
             isBookmark: false,
             timestamp: 0,
           )),
-      const FeedData<ImageType>(
+      FeedData<ImageType>(
           id: "4",
           profile: Profile(id: "4"),
           model: ImageType(
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
             isBookmark: false,
             timestamp: 0,
           )),
-      const FeedData<VideoType>(
+      FeedData<VideoType>(
           id: "5",
           profile: Profile(id: "5"),
           model: VideoType(
@@ -78,7 +78,7 @@ class HomePage extends StatelessWidget {
             isBookmark: false,
             timestamp: 0,
           )),
-      const FeedData<TextType>(
+      FeedData<TextType>(
           id: "6",
           profile: Profile(id: "6"),
           model: TextType(
@@ -178,8 +178,8 @@ class ItemTile extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(50.0))),
         child: Column(
           children: [
-            ProfileWidget(profile: feed.profile ?? const Profile(id: "id")),
-            InkWell(
+            ProfileWidget(profile: feed.profile ?? Profile(id: "id")),
+            GestureDetector(
               onTap: () {
                 !feedList.items.contains(feed)
                     ? feedList.add(feed)
@@ -209,7 +209,7 @@ class ItemTile extends StatelessWidget {
             side: BorderSide(),
             borderRadius: BorderRadius.all(Radius.circular(50.0))),
         child: Material(
-          child: InkWell(
+          child: GestureDetector(
             onTap: () {
               !feedList.items.contains(feed)
                   ? feedList.add(feed)
@@ -326,9 +326,9 @@ class VideoWidgetState extends State<VideoWidget> {
 }
 
 class ProfileWidget extends StatefulWidget {
-  final Profile profile;
+  final Profile? profile;
 
-  const ProfileWidget({super.key, required this.profile});
+  const ProfileWidget({this.profile});
 
   @override
   ProfileWidgetState createState() => ProfileWidgetState();
@@ -340,25 +340,39 @@ class ProfileWidgetState extends State<ProfileWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            Image.network(
-              width: 32,
-              height: 32,
-              widget.profile.thumbnail ??
-                  "https://github.com/flutter/plugins/blob/main/packages/video_player/video_player/doc/demo_ipod.gif?raw=true",
-              fit: BoxFit.cover,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.profile.name ?? "이름"),
-                Text(widget.profile.job ?? "직업직업직업"),
-              ],
-            ),
-          ],
+        Container(
+          margin: EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Image.network(
+                width: 32,
+                height: 32,
+                widget.profile?.thumbnail ??
+                    "https://github.com/flutter/plugins/blob/main/packages/video_player/video_player/doc/demo_ipod.gif?raw=true",
+                fit: BoxFit.cover,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.profile?.name ?? "이름"),
+                  Text(widget.profile?.job ?? "직업직업직업"),
+                ],
+              ),
+            ],
+          ),
         ),
-        Text(widget.profile.isFollow == true ? "FOLLOWING" : "FOLLOW")
+        GestureDetector (
+          onTap: () {
+            setState(() {
+              widget.profile?.setFollow(!(widget.profile?.isFollow ?? false));
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.all(16),
+            child:
+                Text(widget.profile?.isFollow == true ? "FOLLOWING" : "FOLLOW"),
+          ),
+        ),
       ],
     );
   }
@@ -389,9 +403,20 @@ class FeedContentWidgetState extends State<FeedContentWidget> {
               const Icon(Icons.share_outlined),
               Text(widget.feedType?.share.toString() ?? ""),
             ]),
-            widget.feedType?.isBookmark == true
-                ? const Icon(Icons.bookmark)
-                : const Icon(Icons.bookmark_border_outlined),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.feedType
+                      ?.setBookmark(!(widget.feedType?.isBookmark ?? false));
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.all(16),
+                child: widget.feedType?.isBookmark == true
+                    ? const Icon(Icons.bookmark)
+                    : const Icon(Icons.bookmark_border_outlined),
+              ),
+            ),
           ],
         )
       ],

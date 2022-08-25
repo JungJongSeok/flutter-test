@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class Feeds extends ChangeNotifier {
@@ -16,7 +14,7 @@ class Feeds extends ChangeNotifier {
     _feedItems.remove(feed);
     notifyListeners();
   }
-}
+ }
 
 class FeedData<T extends FeedType> {
   final String id;
@@ -24,6 +22,11 @@ class FeedData<T extends FeedType> {
   final T? model;
 
   const FeedData({required this.id, this.profile, this.model});
+
+  @override
+  int get hashCode {
+    return id.hashCode;
+  }
 }
 
 class Profile {
@@ -32,21 +35,25 @@ class Profile {
   final String? thumbnail;
   final String? job;
   final String? location;
-  final bool? isFollow;
+  bool? isFollow;
 
-  const Profile(
+  Profile(
       {required this.id,
       this.name,
       this.thumbnail,
       this.job,
       this.location,
       this.isFollow});
+
+  setFollow(bool isFollow) {
+    this.isFollow = isFollow;
+  }
 }
 
 class ImageType extends FeedType {
   final String url;
 
-  const ImageType({
+  ImageType({
     required this.url,
     required super.text,
     required super.like,
@@ -60,7 +67,7 @@ class ImageType extends FeedType {
 class VideoType extends TextType {
   final String url;
 
-  const VideoType({
+  VideoType({
     required this.url,
     required super.text,
     required super.like,
@@ -73,7 +80,7 @@ class VideoType extends TextType {
 
 class TextType extends FeedType {
 
-  const TextType({
+  TextType({
     required super.text,
     required super.like,
     required super.comment,
@@ -88,10 +95,10 @@ class FeedType {
   final int like;
   final int comment;
   final int share;
-  final bool isBookmark;
+  bool isBookmark;
   final int timestamp;
 
-  const FeedType({
+  FeedType({
     required this.text,
     required this.like,
     required this.comment,
@@ -99,4 +106,8 @@ class FeedType {
     required this.isBookmark,
     required this.timestamp,
   });
+
+  setBookmark(bool isBookmark) {
+    this.isBookmark = isBookmark;
+  }
 }
