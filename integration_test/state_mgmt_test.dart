@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 import 'package:testing_app/models/favorites.dart';
-import 'package:testing_app/screens/favorites.dart';
+import 'package:testing_app/screens/city.dart';
 
 late Favorites favoritesList;
 
@@ -17,7 +17,7 @@ Widget createFavoritesScreen() => ChangeNotifierProvider<Favorites>(
         return favoritesList;
       },
       child: const MaterialApp(
-        home: FavoritesPage(),
+        home: CityPage(),
       ),
     );
 

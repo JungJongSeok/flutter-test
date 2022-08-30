@@ -45,7 +45,7 @@ class Profile {
       this.location,
       this.isFollow});
 
-  setFollow(bool isFollow) {
+  void setFollow(bool isFollow) {
     this.isFollow = isFollow;
   }
 }
@@ -59,6 +59,7 @@ class ImageType extends FeedType {
     required super.like,
     required super.comment,
     required super.share,
+    required super.isLike,
     required super.isBookmark,
     required super.timestamp,
   });
@@ -73,6 +74,7 @@ class VideoType extends FeedType {
     required super.like,
     required super.comment,
     required super.share,
+    required super.isLike,
     required super.isBookmark,
     required super.timestamp,
   });
@@ -85,6 +87,7 @@ class TextType extends FeedType {
     required super.like,
     required super.comment,
     required super.share,
+    required super.isLike,
     required super.isBookmark,
     required super.timestamp,
   });
@@ -92,9 +95,10 @@ class TextType extends FeedType {
 
 class FeedType {
   final String text;
-  final int like;
+  int like;
   final int comment;
   final int share;
+  bool isLike;
   bool isBookmark;
   final int timestamp;
 
@@ -103,11 +107,29 @@ class FeedType {
     required this.like,
     required this.comment,
     required this.share,
+    required this.isLike,
     required this.isBookmark,
     required this.timestamp,
   });
 
-  setBookmark(bool isBookmark) {
+  void setBookmark(bool isBookmark) {
     this.isBookmark = isBookmark;
+  }
+
+  void setLike(bool isLike) {
+    if (isLike) {
+      increaseLike();
+    } else {
+      decreaseLike();
+    }
+    this.isLike = isLike;
+  }
+
+  void increaseLike() {
+    this.like += 1;
+  }
+
+  void decreaseLike() {
+    this.like -= 1;
   }
 }

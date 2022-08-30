@@ -5,9 +5,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:testing_app/models/feeds.dart';
-import 'package:testing_app/screens/carousel.dart';
-import 'package:testing_app/screens/favorites.dart';
+import 'package:testing_app/screens/city.dart';
 import 'package:testing_app/screens/home.dart';
+import 'package:testing_app/screens/video_editor.dart';
 
 void main() {
   runApp(const TestingApp());
@@ -31,7 +31,8 @@ class TestingApp extends StatelessWidget {
         ),
         routes: {
           HomePage.routeName: (context) => const HomePage(),
-          FavoritesPage.routeName: (context) => const CarouselDemo(),
+          CityPage.routeName: (context) => const CityPage(),
+          VideoPickerPage.routeName: (context) => const VideoPickerPage(),
         },
         initialRoute: HomePage.routeName,
       ),
